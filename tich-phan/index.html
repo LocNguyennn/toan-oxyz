@@ -3,13 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Đề Kiểm Tra Tích Phân - ThS. Trần Trọng Trị</title>
+    <title>Hệ Thống Kiểm Tra Tích Phân - ThS. Trần Trọng Trị</title>
     <script>
       window.MathJax = { tex: { inlineMath: [['$', '$']], displayMath: [['$$', '$$']] }, options: { processHtmlClass: 'mathjax-process' } };
     </script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
-        :root { --bg: #0d1117; --card: #161b22; --accent: #58a6ff; --text: #c9d1d9; --correct: #238636; --wrong: #da3633; --gold: #f1c40f; }
+        :root { --bg: #0d1117; --card: #161b22; --accent: #58a6ff; --text: #c9d1d9; --correct: #238636; --wrong: #da3633; --gold: #f1c40f; --ai: #8a2be2; }
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); display: flex; flex-direction: column; align-items: center; padding: 20px; margin: 0; user-select: none; }
         header { text-align: center; margin-bottom: 20px; border-bottom: 2px solid var(--accent); width: 100%; padding-bottom: 15px; }
         #nameModal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.98); display: flex; justify-content: center; align-items: center; z-index: 9999; }
@@ -39,9 +40,15 @@
         .next-btn { margin-top: 20px; width: 100%; padding: 15px; background: var(--gold); color: #000; border: none; border-radius: 10px; cursor: pointer; font-weight: bold; }
         .img-container { text-align: center; margin: 15px 0; background: white; padding: 10px; border-radius: 8px; border: 1px solid #ddd; }
         .img-container img { max-height: 200px; }
+        
+        /* PHẦN LỜI GIẢI MỚI */
         #final-area { display: none; width: 100%; max-width: 1050px; }
-        .sol-card { background: var(--card); padding: 25px; border-radius: 12px; margin-top: 20px; border-top: 4px solid var(--gold); line-height: 1.8; }
-        .sol-text { color: #c9d1d9; margin-top: 15px; background: #0d1117; padding: 15px; border-radius: 8px; border: 1px solid #30363d; }
+        .sol-card { background: var(--card); padding: 25px; border-radius: 12px; margin-top: 25px; border: 1px solid #30363d; position: relative; }
+        .ai-btn { background: linear-gradient(45deg, #4b0082, #8a2be2); color: white; border: none; padding: 10px 20px; border-radius: 20px; cursor: pointer; font-weight: bold; margin-top: 15px; display: flex; align-items: center; gap: 10px; transition: 0.3s; }
+        .ai-btn:hover { transform: scale(1.05); box-shadow: 0 0 15px var(--ai); }
+        .ai-sol-box { display: none; background: #0d1117; padding: 20px; border-radius: 10px; border-left: 4px solid var(--ai); margin-top: 15px; line-height: 1.8; animation: fadeIn 0.5s; }
+        .screenshot-btn { background: #444; color: #fff; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-size: 0.8rem; margin-top: 10px; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body oncontextmenu="return false;">
@@ -49,8 +56,8 @@
 <div id="nameModal">
     <div class="name-box">
         <h2 style="color:var(--gold)">HỆ THỐNG KIỂM TRA</h2>
-        <p>ThS. Trần Trọng Trị - GV Chuyên Toán Trường THPT Gia Định</p>
-        <input type="text" id="studentName" class="name-input" placeholder="Họ và Tên học sinh...">
+        <p>ThS. Trần Trọng Trị - GV Chuyên Toán Gia Định</p>
+        <input type="text" id="studentName" class="name-input" placeholder="Nhập Họ và Tên học sinh...">
         <button class="btn" style="text-align:center; width:100%; background:var(--accent); color:white" onclick="startGame()">BẮT ĐẦU</button>
     </div>
 </div>
@@ -73,7 +80,7 @@
 
     <div class="sidebar">
         <div class="image-box">
-            <img src="hinh_game.jpg" style="width:100%; height:100%; object-fit:cover" onerror="this.src='https://via.placeholder.com/350x260?text=Mathematics'">
+            <img src="hinh_game.jpg" style="width:100%; height:100%; object-fit:cover" onerror="this.src='https://via.placeholder.com/350x260?text=Euler'">
             <div id="grid" class="grid-overlay"></div>
         </div>
         <div class="status">
@@ -88,80 +95,81 @@
     <div style='text-align:center; padding:30px; background:var(--card); border-radius:15px; border:2px solid var(--gold); margin-bottom: 30px;'>
         <h2 style='color:var(--gold); margin-top:0;'>HOÀN THÀNH BÀI THI</h2>
         <h3 style='color:var(--accent)' id="final-score-display"></h3>
+        <p>Học sinh có thể xem lại đề và nhấp vào nút AI để xem phân tích chi tiết.</p>
     </div>
-    <h2 style="color:var(--gold); border-bottom: 2px solid var(--gold); padding-bottom:10px;">LỜI GIẢI CHI TIẾT</h2>
     <div id="sol-content"></div>
     <button class="btn" style="margin: 40px 0; width:100%; text-align:center" onclick="location.reload()">QUAY LẠI TRANG CHỦ</button>
 </div>
 
 <script>
+    // Chặn phím tắt kiểm tra
     document.onkeydown = function(e) { if(e.keyCode == 123 || (e.ctrlKey && e.shiftKey && (e.keyCode == 73 || e.keyCode == 74)) || (e.ctrlKey && e.keyCode == 85)) return false; };
 
     const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyu-MpFNTly4cIhVq0cv2YclWmyLtxjQllhss1LzBr2p3vtC02F83Suhh9rUdIoNBzRww/exec";
     let studentName = "", currentIdx = 0, score = 0, userAns = "", v2Ans = [], selectedV1 = null;
 
     const questions = [
-        // PHẦN I
+        // Vòng 1
         { part: 1, type: 'v1', num: 1, q: "Mệnh đề nào dưới đây là <b>sai</b>?", a: ["$\\displaystyle \\int f'(x) dx = f(x)+C$", "$\\displaystyle \\int [f(x)+g(x)] dx = \\int f(x)dx + \\int g(x)dx$", "$\\displaystyle \\int k f(x) dx = k \\int f(x)dx$", "$\\displaystyle \\int [f(x)-g(x)] dx = \\int f(x)dx - \\int g(x)dx$"], c: "Mg==", 
-          sol: "• <b>Khẳng định A (Đúng):</b> Đây là định nghĩa cơ bản của nguyên hàm.<br>• <b>Khẳng định B và D (Đúng):</b> Đây là tính chất tuyến tính của nguyên hàm.<br>• <b>Khẳng định C (Sai):</b> Mệnh đề khẳng định đúng với mọi hằng số $k$. Điều này không chính xác khi $k=0$. Khi đó vế trái bằng $C$ còn vế phải bằng $0$." },
+          sol: "<b>Hệ thống AI phân tích:</b><br>• Khẳng định C <b>Sai</b> vì hằng số $k$ phải thỏa mãn điều kiện $k \\neq 0$. <br>• <i>Chứng minh:</i> Nếu $k=0$, vế trái là $\\int 0 dx = C$, vế phải là $0 \\cdot \\int f(x)dx = 0$. Hai vế không nhất thiết bằng nhau." },
         { part: 1, type: 'v1', num: 2, q: "Nguyên hàm của hàm số $f(x) = \\cos x$ là:", a: ["$-\\sin x + C$", "$\\sin x + C$", "$\\cos x + C$", "$-\\cos x + C$"], c: "MQ==", 
-          sol: "Ta cần tìm hàm $F(x)$ sao cho $F'(x) = f(x)$. Ta có $(\\sin x)' = \\cos x$, do đó $\\displaystyle \\int \\cos x dx = \\sin x + C$." },
+          sol: "<b>Hệ thống AI phân tích:</b><br>Sử dụng bảng nguyên hàm cơ bản: $\\displaystyle \\int \\cos x dx = \\sin x + C$. <br>Kiểm tra lại: $(\\sin x + C)' = \\cos x$ (Đúng)." },
         { part: 1, type: 'v1', num: 3, q: "Tìm họ nguyên hàm của hàm số $f(x) = 5^x$.", a: ["$5^x + C$", "$5^x \\ln 5 + C$", "$\\displaystyle \\dfrac{5^x}{\\ln 5} + C$", "$\\displaystyle \\dfrac{5^{x+1}}{x+1} + C$"], c: "Mg==", 
-          sol: "Áp dụng công thức nguyên hàm hàm số mũ: $\\displaystyle \\int a^x dx = \\dfrac{a^x}{\\ln a} + C$. Với $a=5$ ta được $\\displaystyle \\dfrac{5^x}{\\ln 5} + C$." },
+          sol: "<b>Hệ thống AI phân tích:</b><br>Áp dụng công thức nguyên hàm hàm số mũ: $\\displaystyle \\int a^x dx = \\dfrac{a^x}{\\ln a} + C$. Với $a=5$, ta có kết quả là $\\displaystyle \\dfrac{5^x}{\\ln 5} + C$." },
         { part: 1, type: 'v1', num: 4, q: "Cho hàm số $f(x)$ xác định trên $K$ và $F(x)$ là một nguyên hàm của $f(x)$ trên $K$. Khẳng định nào đúng?", a: ["$f'(x) = F(x)$", "$F'(x) = f(x)$", "$F(x) = f(x)$", "$F'(x) = f'(x)$"], c: "MQ==", 
-          sol: "Theo định nghĩa, $F(x)$ là một nguyên hàm của $f(x)$ trên $K$ nếu $F'(x) = f(x)$ với mọi $x \\in K$." },
+          sol: "<b>Hệ thống AI phân tích:</b><br>Dựa vào định nghĩa nguyên hàm: Hàm số $F(x)$ là nguyên hàm của $f(x)$ trên $K$ nếu đạo hàm của hàm nguyên hàm bằng hàm số dưới dấu tích phân: $F'(x) = f(x)$." },
         { part: 1, type: 'v1', num: 5, q: "Tìm $\\displaystyle \\int \\dfrac{1}{x^2} dx$.", a: ["$\\displaystyle \\dfrac{1}{x} + C$", "$\\displaystyle -\\dfrac{1}{x} + C$", "$\\displaystyle \\dfrac{1}{2x} + C$", "$\\ln x^2 + C$"], c: "MQ==", 
-          sol: "Sử dụng công thức nguyên hàm lũy thừa: $\\displaystyle \\int x^n dx = \\dfrac{x^{n+1}}{n+1} + C$. Ta có $\\displaystyle \\int x^{-2} dx = \\dfrac{x^{-1}}{-1} + C = -\\dfrac{1}{x} + C$." },
+          sol: "<b>Hệ thống AI phân tích:</b><br>Viết dưới dạng lũy thừa: $\\displaystyle \\dfrac{1}{x^2} = x^{-2}$.<br>Áp dụng $\\displaystyle \\int x^n dx = \\dfrac{x^{n+1}}{n+1} + C$:<br>$\\displaystyle \\int x^{-2} dx = \\dfrac{x^{-1}}{-1} + C = -\\dfrac{1}{x} + C$." },
         { part: 1, type: 'v1', num: 6, q: "Họ các nguyên hàm của hàm số $f(x) = x^2 - 3x + \\dfrac{1}{x}$ là:", a: ["$F(x) = 2x - 3 - 1/x^2 + C$", "$\\displaystyle F(x) = \\dfrac{x^3}{3} - \\dfrac{3}{2}x^2 + \\ln |x| + C$", "$\\displaystyle F(x) = \\dfrac{x^3}{3} + \\dfrac{3}{2}x^2 + \\ln x + C$", "$\\displaystyle F(x) = \\dfrac{x^3}{3} - \\dfrac{3}{2}x^2 + \\ln x + C$"], c: "MQ==", 
-          sol: "Ta tính nguyên hàm từng số hạng: $\\displaystyle \\int x^2 dx = \\dfrac{x^3}{3}$; $\\displaystyle \\int -3x dx = -\\dfrac{3x^2}{2}$; $\\displaystyle \\int \\dfrac{1}{x} dx = \\ln|x|$. Kết quả là phương án B." },
+          sol: "<b>Hệ thống AI phân tích:</b><br>Tính nguyên hàm từng số hạng:<br>1. $\\displaystyle \\int x^2 dx = \\dfrac{x^3}{3}$<br>2. $\\displaystyle \\int -3x dx = -\\dfrac{3x^2}{2}$<br>3. $\\displaystyle \\int \\dfrac{1}{x} dx = \\ln |x|$<br>Hợp lại ta có phương án B." },
         { part: 1, type: 'v1', num: 7, q: "Cho hàm số $y=f(x)$ liên tục trên $K$ và $a, b, c \\in K$. Mệnh đề nào sau đây <b>sai</b>?", a: ["$\\displaystyle \\int_a^b f(x)dx + \\int_c^b f(x)dx = \\int_a^c f(x)dx$", "$\\displaystyle \\int_a^b f(x)dx = \\int_a^b f(t)dt$", "$\\displaystyle \\int_a^b f(x)dx = -\\int_b^a f(x)dx$", "$\\displaystyle \\int_a^a f(x)dx = 0$"], c: "MA==", 
-          sol: "Khẳng định A <b>Sai</b>. Theo tính chất chèn điểm: $\\int_a^c f(x)dx + \\int_c^b f(x)dx = \\int_a^b f(x)dx$." },
+          sol: "<b>Hệ thống AI phân tích:</b><br>Mệnh đề A <b>Sai</b> vì theo tính chất nối cận: $\\displaystyle \\int_a^c f(x)dx + \\int_c^b f(x)dx = \\int_a^b f(x)dx$.<br>Ở đây vế trái và vế phải bị hoán đổi logic." },
         { part: 1, type: 'v1', num: 8, q: "Cho $F(x)$ là một nguyên hàm của hàm số $f(x)$. Khi đó hiệu số $F(0)-F(1)$ bằng:", a: ["$\\displaystyle \\int_0^1 f(x)dx$", "$\\displaystyle \\int_0^1 F(x)dx$", "$\\displaystyle \\int_1^0 F(x)dx$", "$\\displaystyle \\int_1^0 f(x)dx$"], c: "Mw==", 
-          sol: "Theo công thức Newton-Leibniz: $\\displaystyle \\int_a^b f(x)dx = F(b) - F(a)$. Với $a=1, b=0$ ta có $F(0)-F(1) = \\int_1^0 f(x)dx$." },
+          sol: "<b>Hệ thống AI phân tích:</b><br>Theo định lý cơ bản (Newton-Leibniz): $\\displaystyle \\int_a^b f(x)dx = F(b) - F(a)$.<br>Để thu được $F(0)-F(1)$, ta chọn cận dưới $a=1$, cận trên $b=0$." },
         { part: 1, type: 'v1', num: 9, q: "Cho $f(1)=2, f(3)=9$. Tính $I = \\displaystyle \\int_1^3 f'(x)dx$.", a: ["11", "7", "2", "18"], c: "MQ==", 
-          sol: "$\\displaystyle I = \\int_1^3 f'(x)dx = f(x) \\Big|_1^3 = f(3) - f(1) = 9 - 2 = 7$." },
-        { part: 1, type: 'v1', num: 10, q: "Diện tích hình phẳng giới hạn bởi $y=f(x)$, trục hoành, $x=a, x=b$ ($a < b$) là:", a: ["$\\displaystyle S = \\pi \\int_a^b f^2(x)dx$", "$\\displaystyle S = \\int_a^b f(x)dx$", "$\\displaystyle S = \\pi \\int_a^b |f(x)|dx$", "$\\displaystyle S = \\int_a^b |f(x)|dx$"], c: "Mw==", 
-          sol: "Diện tích hình phẳng $S$ luôn được tính bằng tích phân của giá trị tuyệt đối hàm số: $\\displaystyle S = \\int_a^b |f(x)| dx$." },
+          sol: "<b>Hệ thống AI phân tích:</b><br>$\\displaystyle I = \\int_1^3 f'(x)dx = f(x) \\Big|_1^3 = f(3) - f(1)$.<br>Thay số: $I = 9 - 2 = 7$." },
+        { part: 1, type: 'v1', num: 10, q: "Diện tích hình phẳng giới hạn bởi $y=f(x)$, trục hoành và $x=a, x=b$ ($a < b$) là:", a: ["$\\displaystyle S = \\pi \\int_a^b f^2(x)dx$", "$\\displaystyle S = \\int_a^b f(x)dx$", "$\\displaystyle S = \\pi \\int_a^b |f(x)|dx$", "$\\displaystyle S = \\int_a^b |f(x)|dx$"], c: "Mw==", 
+          sol: "<b>Hệ thống AI phân tích:</b><br>Diện tích hình phẳng giới hạn bởi $y=f(x)$ và trục hoành $y=0$ luôn là tích phân của trị tuyệt đối hàm số trên đoạn đang xét." },
         { part: 1, type: 'v1', num: 11, q: "Khẳng định nào đúng về diện tích $S$? <div class='img-container'><img src='cau11.png'></div>", a: ["$S = \\displaystyle \\int_a^b [f_2(x)-f_1(x)] dx$", "$\\displaystyle S = \\int_a^b [f_1(x)-f_2(x)] dx$", "$\\pi \\int [f_1-f_2]^2 dx$", "$\\pi \\int [f_1-f_2] dx$"], c: "MQ==", 
-          sol: "Dựa vào hình vẽ, trên đoạn $[a,b]$, đồ thị $f_1(x)$ nằm trên $f_2(x)$. Do đó $\\displaystyle S = \\int_a^b [f_1(x) - f_2(x)] dx$." },
+          sol: "<b>Hệ thống AI phân tích:</b><br>Dựa vào đồ thị, trên đoạn $[a,b]$, đường $f_1(x)$ luôn nằm phía trên đường $f_2(x)$.<br>Công thức diện tích giữa hai đồ thị là: $\\displaystyle S = \\int_a^b (y_{tren} - y_{duoi}) dx$." },
         { part: 1, type: 'v1', num: 12, q: "Công thức tính thể tích $V$ giới hạn bởi $x=a, x=b$ có diện tích thiết diện $S(x)$ là:", a: ["$V = \\int_b^a S(x)$", "$V = \\pi \\int S(x)$", "$V = \\pi \\int S^2(x)$", "$\\displaystyle V = \\int_a^b S(x)dx$"], c: "Mw==", 
-          sol: "Thể tích vật thể cắt bởi thiết diện chuẩn là $\\displaystyle V = \\int_a^b S(x) dx$." },
+          sol: "<b>Hệ thống AI phân tích:</b><br>Đây là công thức tổng quát tính thể tích vật thể theo thiết diện phẳng vuông góc với trục $Ox$. Cần phân biệt với công thức khối tròn xoay." },
 
         // PHẦN II
         { 
             part: 2, type: 'v2', num: 1, q: "Cho $F(x)$ là nguyên hàm của $f(x) = \\dfrac{x^2+1}{x}$ trên $(0;+\\infty)$. Xét tính đúng/sai:", 
             items: [ {l: "$F(x) = f'(x)$", r: "ZmFsc2U="}, {l: "$F(x)+2025$ là nguyên hàm của $f(x)$", r: "dHJ1ZQ=="}, {l: "$F(x) = x^2 + \\ln x + 2025$", r: "ZmFsc2U="}, {l: "Biết $F(1)=1.5 \\Rightarrow F(x)=x^2/2+2$", r: "ZmFsc2U="} ], 
-            sol: "• <b>a: Sai.</b> Theo định nghĩa $F'(x)=f(x)$, không phải $F(x)=f'(x)$.<br>• <b>b: Đúng.</b> Mọi nguyên hàm đều có dạng $F(x)+C$.<br>• <b>c: Sai.</b> $\\displaystyle F(x) = \\int (x+1/x)dx = \\dfrac{x^2}{2} + \\ln x + C$. Biểu thức đề bài sai hệ số của $x^2$.<br>• <b>d: Sai.</b> Tại $F(1)=1.5 \\Rightarrow C=1$. Vậy $F(x)=\\dfrac{x^2}{2}+\\ln x+1$." 
+            sol: "<b>Hệ thống AI phân tích:</b><br>• <b>a: Sai.</b> Vì $F'(x)=f(x)$, không phải $F(x)=f'(x)$.<br>• <b>b: Đúng.</b> Nếu $F(x)$ là nguyên hàm thì $F(x)+C$ cũng là nguyên hàm.<br>• <b>c: Sai.</b> $\\displaystyle \\int (x + 1/x) dx = \\dfrac{x^2}{2} + \\ln x + C$. Biểu thức đề cho sai hệ số $x^2$.<br>• <b>d: Sai.</b> $F(1) = 1/2 + \\ln 1 + C = 1.5 \\Rightarrow C=1$. Vậy $F(x) = \\dfrac{x^2}{2} + \\ln x + 1$." 
         },
         { 
             part: 2, type: 'v2', num: 2, q: "Cho $f(x)=6x^5-x^e$. Gọi $I = \\int 6x^5dx, J = \\int x^edx$. Xét tính đúng/sai:", 
             items: [ {l: "$A = \\int x^5dx \\Rightarrow A=6I$", r: "ZmFsc2U="}, {l: "$\\int f(x)dx = I+J$", r: "ZmFsc2U="}, {l: "$J = b^e - a^e$", r: "ZmFsc2U="}, {l: "$\\int_0^1 f(x)dx = m - \\dfrac{n}{e+p} \\Rightarrow m+n+p=3$", r: "dHJ1ZQ=="} ], 
-            sol: "• <b>a: Sai.</b> Phải là $I=6A$.<br>• <b>b: Sai.</b> $\\int (6x^5-x^e)dx = I-J$.<br>• <b>c: Sai.</b> $J = [x^{e+1}/(e+1)]_a^b$.<br>• <b>d: Đúng.</b> $\\displaystyle \\int_0^1 f(x)dx = 1 - \\dfrac{1}{e+1}$. Suy ra $m=1, n=1, p=1 \\Rightarrow m+n+p=3$." 
+            sol: "<b>Hệ thống AI phân tích:</b><br>• <b>a: Sai.</b> $I = 6A$. • <b>b: Sai.</b> $\\int (6x^5 - x^e) dx = I - J$. • <b>c: Sai.</b> $J$ là tích phân, phải dùng công thức lũy thừa.<br>• <b>d: Đúng.</b> $\\displaystyle \\int_0^1 f(x) dx = [x^6 - \\dfrac{x^{e+1}}{e+1}]_0^1 = 1 - \\dfrac{1}{e+1}$. Suy ra $m=1, n=1, p=1 \\Rightarrow m+n+p=3$." 
         },
         { 
             part: 2, type: 'v2', num: 3, q: "Cho hàm số $f(x) = x+5-\\dfrac{6}{x}$ trên $\\mathbb{R}\\backslash\\{0\\}$. Xét tính đúng/sai:", 
-            items: [ {l: "$f(x)$ là nguyên hàm của $g(x)=1+6/x^2$", r: "dHJ1ZQ=="}, {l: "$\\int f(x)dx = 0.5x^2+5x-6\\ln x + C$", r: "ZmFsc2U="}, {l: "Nếu $F(1)=5$ thì $F(2)=5+\\int_1^2 f(x)dx$", r: "dHJ1ZQ=="}, {l: "$G(1)=4, G(2)+G(-1)=5 \\Rightarrow G(-6)=-13-6\\ln 3$", r: "dHJ1ZQ=="} ], 
-            sol: "• <b>a: Đúng.</b> Vì $f'(x) = g(x)$.<br>• <b>b: Sai.</b> Vì thiếu trị tuyệt đối trong $\\ln|x|$.<br>• <b>c: Đúng.</b> Chuyển vế từ Newton-Leibniz.<br>• <b>d: Đúng.</b> Giải hệ hằng số $C_1, C_2$ trên mỗi khoảng tập xác định." 
+            items: [ {l: "$f(x)$ là một nguyên hàm của $g(x)=1+6/x^2$", r: "dHJ1ZQ=="}, {l: "$\\int f(x)dx = 0.5x^2+5x-6\\ln x + C$", r: "ZmFsc2U="}, {l: "Nếu $F(1)=5$ thì $F(2)=5+\\int_1^2 f(x)dx$", r: "dHJ1ZQ=="}, {l: "$G(1)=4, G(2)+G(-1)=5 \\Rightarrow G(-6)=-13-6\\ln 3$", r: "dHJ1ZQ=="} ], 
+            sol: "<b>Hệ thống AI phân tích:</b><br>• <b>a: Đúng.</b> Đạo hàm $f'(x) = 1 + 6/x^2 = g(x)$.<br>• <b>b: Sai.</b> Thiếu trị tuyệt đối trong $\\ln|x|$.<br>• <b>c, d: Đúng.</b> Áp dụng đúng công thức tích phân xác định và giải hệ hằng số trên từng khoảng." 
         },
         { 
-            part: 2, type: 'v2', num: 4, q: "Cho BBT đạo hàm $f'(x)$ trên $(0;+\\infty)$. <div class='img-container'><img src='cau4_ds.png'></div> Xét tính đúng/sai:", 
-            items: [ {l: "$\\int_2^5 f'(x)dx = f(5)-f(2)$", r: "dHJ1ZQ=="}, {l: "$\\int_2^3 f'(x)dx = 1$", r: "ZmFsc2U="}, {l: "Diện tích giới hạn bởi $f'(x), Ox, x=2, x=3$ bằng $1/2$", r: "ZmFsc2U="}, {l: "Nếu $\\int_2^5 |f'(x)|dx=5$ thì $f(5)=5$", r: "ZmFsc2U="} ], 
-            sol: "• <b>a: Đúng.</b> Theo Newton-Leibniz.<br>• <b>b: Sai.</b> Vì $f'(x) < 0$ trên $(2,3)$ nên tích phân âm.<br>• <b>c: Sai.</b> Diện tích $S = f(2)-f(3) = f(2)+1$. Không đủ cơ sở khẳng định bằng $1/2$.<br>• <b>d: Sai.</b> Tích phân bằng $f(2)+f(5)+2=5 \\Rightarrow f(2)+f(5)=3$, không thể kết luận $f(5)=5$." 
+            part: 2, type: 'v2', num: 4, q: "Cho BBT đạo hàm $f'(x)$ trên $(0;+\\infty)$. <div class='img-container'><img src='cau4_ds.png'></div>", 
+            items: [ {l: "$\\int_2^5 f'(x)dx = f(5)-f(2)$", r: "dHJ1ZQ=="}, {l: "$\\int_2^3 f'(x)dx = 1$", r: "ZmFsc2U="}, {l: "Diện tích vùng giới hạn là $0.5$", r: "ZmFsc2U="}, {l: "Nếu $\\int_2^5 |f'(x)|dx=5$ thì $f(5)=5$", r: "ZmFsc2U="} ], 
+            sol: "<b>Hệ thống AI phân tích:</b><br>• <b>a: Đúng.</b> Công thức cơ bản.<br>• <b>b: Sai.</b> $f'(x) < 0$ trên $(2,3)$ nên tích phân không thể là số dương $1$.<br>• <b>d: Sai.</b> Chỉ suy ra được $f(2)+f(5)=3$." 
         },
 
         // PHẦN III
         { part: 3, type: 'v3', num: 1, q: "Biết $\\displaystyle \\int (\\sin x - \\cos x)^2 dx = x + \\dfrac{1}{a} \\cos bx + C$. Tính $S = a+b$.", c: "NA==", 
-          sol: "Ta có: $(\\sin x - \\cos x)^2 = 1 - \\sin 2x$. Nguyên hàm $\\displaystyle \\int (1 - \\sin 2x) dx = x + \\dfrac{1}{2} \\cos 2x + C$. Suy ra $a=2, b=2 \\Rightarrow S=4$." },
+          sol: "<b>Hệ thống AI phân tích:</b><br>Khai triển hằng đẳng thức: $(\\sin x - \\cos x)^2 = \\sin^2 x + \\cos^2 x - 2\\sin x \\cos x = 1 - \\sin 2x$.<br>Nguyên hàm: $\\displaystyle \\int (1 - \\sin 2x) dx = x + \\dfrac{1}{2} \\cos 2x + C$.<br>Đối chiếu hằng số: $a=2, b=2 \\Rightarrow a+b=4$." },
         { part: 3, type: 'v3', num: 2, q: "Cho $\\displaystyle \\int_2^7[2f(x)+3g(x)]=2$ và $\\displaystyle \\int_2^7[f(x)-2g(x)]=4$. Tính $\\displaystyle \\int_2^7[f(x)-g(x)]$. (Làm tròn 2 chữ số TP).", c: "My4xNA==", 
-          sol: "Giải hệ: $2A+3B=2$ và $A-2B=4$ ta được $A=16/7, B=-6/7$. Khi đó $\\displaystyle \\int_2^7(f-g) = A-B = 22/7 \\approx 3.14$." },
+          sol: "<b>Hệ thống AI phân tích:</b><br>Giải hệ phương trình với $A = \\int f(x)dx$ và $B = \\int g(x)dx$:<br>$\\begin{cases} 2A + 3B = 2 \\\\ A - 2B = 4 \\end{cases} \\Rightarrow \\begin{cases} A = 16/7 \\\\ B = -6/7 \\end{cases}$.<br>Tính $A - B = 16/7 - (-6/7) = 22/7 \\approx 3.14$." },
         { part: 3, type: 'v3', num: 3, q: "Cho $F(x)=(ax^2+bx+c)e^x$ là nguyên hàm của $f(x)=(x^2+1)e^x$. Tính $a+b+c$.", c: "Mg==", 
-          sol: "Đồng nhất hệ số của $F'(x) = [ax^2+(2a+b)x+(b+c)]e^x$ với $f(x)$, ta được $a=1, b=-2, c=3$. Vậy $S=2$." },
+          sol: "<b>Hệ thống AI phân tích:</b><br>Đạo hàm $F'(x) = [ax^2 + (2a+b)x + (b+c)]e^x$.<br>Đồng nhất với $(x^2+1)e^x \\Rightarrow a=1, 2a+b=0, b+c=1 \\Rightarrow a=1, b=-2, c=3$.<br>Vậy $a+b+c=2$." },
         { part: 3, type: 'v3', num: 4, q: "Cho hàm số $\\displaystyle f(x) = \\begin{cases} 3x^2-x-9 & \\text{khi } x \\ge 2 \\\\ x-1 & \\text{khi } x < 2 \\end{cases}$. Tính $\\displaystyle I = \\int_0^3 f(x)dx$.", c: "Ny41", 
-          sol: "$\\displaystyle I = \\int_0^2(x-1)dx + \\int_2^3(3x^2-x-9)dx = 0 + 7.5 = 7.5$." },
+          sol: "<b>Hệ thống AI phân tích:</b><br>Chia tích phân tại điểm nối $x=2$:<br>$\\displaystyle I = \\int_0^2 (x-1)dx + \\int_2^3 (3x^2-x-9)dx = 0 + 7.5 = 7.5$." },
         { part: 3, type: 'v3', num: 5, q: "Tính $f(3)$ dựa trên diện tích $S_A=4, S_B=10$ và $f(0)=2$. <div class='img-container'><img src='cau5_kq.png'></div>", c: "LTQ=", 
-          sol: "<b>Giải chi tiết:</b><br><div class='img-container'><img src='cau5_kq_lg.png'></div><br>$\\displaystyle f(3) = f(0) + \\int_0^1 f'(x)dx + \\int_1^3 f'(x)dx = 2 + 4 - 10 = -4$." },
-        { part: 3, type: 'v3', num: 6, q: "Tính tiền trồng hoa (nghìn đồng) giới hạn bởi $y=x^2$ và $y=\\sqrt{20-x^2}$ (Đơn giá 250k/$m^2$). <div class='img-container'><img src='cau6_kq.png'></div>", c: "NDk4NQ==", 
-          sol: "<b>Giải chi tiết:</b><br><div class='img-container'><img src='cau6_kq_lg.png'></div><br>1. Giao điểm $x = \\pm 2$. <br>2. Diện tích $\\displaystyle S = \\int_{-2}^2 (\\sqrt{20-x^2}-x^2)dx \\approx 19.9396 m^2$. <br>3. Tiền = $19.9396 \\times 250 \\approx 4985$ nghìn đồng." }
+          sol: "<b>Hệ thống AI phân tích:</b><br><div class='img-container'><img src='cau5_kq_lg.png'></div><br>$\\displaystyle f(3) = f(0) + \\int_0^3 f'(x)dx = 2 + (S_A - S_B) = 2 + 4 - 10 = -4$." },
+        { part: 3, type: 'v3', num: 6, q: "Tính tiền trồng hoa (nghìn đồng) giới hạn bởi $y=x^2$ và $y=\\sqrt{20-x^2}$ (250k/$m^2$). <div class='img-container'><img src='cau6_kq.png'></div>", c: "NDk4NQ==", 
+          sol: "<b>Hệ thống AI phân tích:</b><br><div class='img-container'><img src='cau6_kq_lg.png'></div><br>1. Giao điểm $x = \\pm 2$.<br>2. Diện tích $\\displaystyle S = \\int_{-2}^2 (\\sqrt{20-x^2}-x^2)dx \\approx 19.9396 m^2$.<br>3. Tiền = $19.9396 \\times 250 \\approx 4985$ nghìn đồng." }
     ];
 
     function startGame() {
@@ -170,8 +178,7 @@
         studentName = input;
         document.getElementById('nameModal').style.display = 'none';
         document.getElementById('student-display').innerText = "Học sinh: " + studentName;
-        const grid = document.getElementById('grid');
-        grid.innerHTML = "";
+        const grid = document.getElementById('grid'); grid.innerHTML = "";
         for(let i=0; i<24; i++) {
             let t = document.createElement('div'); t.className='tile'; t.id='tile-'+i; grid.appendChild(t);
         }
@@ -183,14 +190,13 @@
         const pInfo = document.getElementById('part-info');
         const qTitle = document.getElementById('q-title');
         
-        if(q.part === 1) pInfo.innerHTML = "PHẦN I. TRẮC NGHIỆM 4 PHƯƠNG ÁN. Thí sinh trả lời từ câu 1 đến câu 12. Mỗi câu hỏi thí sinh chỉ chọn một phương án.";
-        else if(q.part === 2) pInfo.innerHTML = "PHẦN II. TRẮC NGHIỆM ĐÚNG SAI. Thí sinh trả lời từ câu 1 đến câu 4. Mỗi ý a), b), c), d) thí sinh chọn Đúng hoặc Sai.";
+        if(q.part === 1) pInfo.innerHTML = "PHẦN I. TRẮC NGHIỆM 4 PHƯƠNG ÁN. Thí sinh trả lời từ câu 1 đến câu 12.";
+        else if(q.part === 2) pInfo.innerHTML = "PHẦN II. TRẮC NGHIỆM ĐÚNG SAI. Thí sinh trả lời từ câu 1 đến câu 4.";
         else pInfo.innerHTML = "PHẦN III. TRẮC NGHIỆM TRẢ LỜI NGẮN. Thí sinh trả lời từ câu 1 đến câu 6.";
 
         qTitle.innerText = "Câu " + q.num + ".";
         document.getElementById('total-q').innerText = currentIdx + 1;
         document.getElementById('q-text').innerHTML = q.q;
-        
         const zone = document.getElementById('ans-zone');
         zone.innerHTML = ''; 
         selectedV1 = null; userAns = ""; v2Ans = new Array(4).fill(null);
@@ -236,18 +242,9 @@
     function handleNext() {
         const q = questions[currentIdx];
         let correct = false;
-
-        if(q.type === 'v1') {
-            if(selectedV1 === null) return alert("Em chưa chọn đáp án!");
-            if(selectedV1.toString() === atob(q.c)) { score += 0.25; correct = true; }
-        } else if(q.type === 'v2') {
-            if(v2Ans.includes(null)) return alert("Hãy chọn đủ Đúng/Sai!");
-            let c = 0; q.items.forEach((it, i) => { if(v2Ans[i].toString() === atob(it.r)) c++; });
-            const pts = [0, 0.1, 0.25, 0.5, 1.0]; score += pts[c]; if(c === 4) correct = true;
-        } else {
-            if(!userAns) return alert("Nhập đáp án!");
-            if(userAns == atob(q.c)) { score += 0.5; correct = true; }
-        }
+        if(q.type === 'v1') { if(selectedV1 === null) return alert("Chọn đáp án đã!"); if(selectedV1.toString() === atob(q.c)) { score += 0.25; correct = true; } }
+        else if(q.type === 'v2') { if(v2Ans.includes(null)) return alert("Chọn hết đi em!"); let cCount = 0; q.items.forEach((it, i) => { if(v2Ans[i].toString() === atob(it.r)) cCount++; }); const pts = [0, 0.1, 0.25, 0.5, 1.0]; score += pts[cCount]; if(cCount === 4) correct = true; }
+        else { if(!userAns) return alert("Nhập số vào!"); if(userAns == atob(q.c)) { score += 0.5; correct = true; } }
 
         if(correct) openTile();
         document.getElementById('score').innerText = score.toFixed(2);
@@ -264,15 +261,33 @@
         let html = "";
         questions.forEach((q, i) => {
             let pText = q.part === 1 ? "PHẦN I" : (q.part === 2 ? "PHẦN II" : "PHẦN III");
-            html += `<div class='sol-card'>
+            html += `<div class='sol-card' id='sol-card-${i}'>
                 <b style='color:var(--gold)'>${pText} - Câu ${q.num}:</b> ${q.q}
-                <div class='sol-text'><b>Lời giải chi tiết:</b><br>${q.sol}</div>
+                <button class='ai-btn' onclick='toggleAI(${i})'><span>🤖</span> AI PHÂN TÍCH & GIẢI CHI TIẾT</button>
+                <div class='ai-sol-box' id='ai-box-${i}'>
+                    <div class='mathjax-process'>${q.sol}</div>
+                    <button class='screenshot-btn' onclick='takeShot(${i})'>📸 CHỤP LỜI GIẢI NÀY</button>
+                </div>
             </div>`;
         });
         document.getElementById('sol-content').innerHTML = html;
         document.querySelectorAll('.tile').forEach(t => t.classList.add('open'));
         MathJax.typesetPromise();
         fetch(GOOGLE_SCRIPT_URL, { method: "POST", mode: "no-cors", body: JSON.stringify({ name: studentName, score: score.toFixed(2) }) });
+    }
+
+    function toggleAI(idx) {
+        let box = document.getElementById('ai-box-'+idx);
+        box.style.display = (box.style.display === 'block') ? 'none' : 'block';
+    }
+
+    function takeShot(idx) {
+        html2canvas(document.getElementById('sol-card-'+idx)).then(canvas => {
+            let link = document.createElement('a');
+            link.download = 'LoiGiai_Cau' + (idx+1) + '.png';
+            link.href = canvas.toDataURL();
+            link.click();
+        });
     }
 </script>
 </body>
