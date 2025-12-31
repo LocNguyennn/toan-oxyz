@@ -103,7 +103,9 @@
         { type: 'v1', q: "Cho $F(x)$ là nguyên hàm của $f(x)$. Hiệu số $F(0)-F(1)$ bằng:", a: ["$\\int_0^1 f(x)dx$", "$\\int_0^1 F(x)dx$", "$\\int_1^0 F(x)dx$", "$\\int_1^0 f(x)dx$"], c: 3, sol: "Theo Newton-Leibniz: $\\int_1^0 f(x)dx = F(0) - F(1)$." },
         { type: 'v1', q: "Cho $f(1)=2, f(3)=9$. Tính $I = \\int_1^3 f'(x)dx$.", a: ["11", "7", "2", "18"], c: 1, sol: "$I = f(3) - f(1) = 9 - 2 = 7$." },
         { type: 'v1', q: "Diện tích hình phẳng giới hạn bởi $y=f(x)$, trục hoành, $x=a, x=b$ là:", a: ["$\\pi \\int f^2$", "$\\int f$", "$\\pi \\int |f|$", "$\\int_a^b |f(x)|dx$"], c: 3, sol: "Công thức tính diện tích: $S = \\int_a^b |f(x)| dx$." },
-        { type: 'v1', q: "Khẳng định nào đúng về diện tích $S$ giới hạn bởi $f_1, f_2$ (với $f_1 > f_2$)?<div class='illus-wrap'><svg width='160' height='100'><path d='M10 20 Q 80 0 150 20' stroke='red' fill='none'/><path d='M10 70 Q 80 90 150 70' stroke='blue' fill='none'/><path d='M40 13 L 40 85 M 120 13 L 120 85' stroke='black' stroke-dasharray='4'/><text x='155' y='20' fill='red'>f1</text><text x='155' y='75' fill='blue'>f2</text></svg></div>", a: ["$S = \\int [f_2-f_1]$","$\\int [f_1-f_2]$","$\\pi \\int (f_1-f_2)^2$","$\\pi \\int (f_1-f_2)$"], c: 1, sol: "Nhìn hình, $f_1$ nằm trên $f_2$ nên $S = \\int (f_1-f_2)dx$." },
+        { type: 'v1', q: "Khẳng định nào đúng về diện tích $S$ giới hạn bởi $f_1, f_2$ (với $f_1 > f_2$)?<div style="text-align:center; margin:15px 0;">
+    <img src="cau11.png" style="max-height: 200px; background: white; padding: 10px; border-radius: 8px; border: 1px solid #ddd;">
+</div>", a: ["$S = \\int [f_2-f_1]$","$\\int [f_1-f_2]$","$\\pi \\int (f_1-f_2)^2$","$\\pi \\int (f_1-f_2)$"], c: 1, sol: "Nhìn hình, $f_1$ nằm trên $f_2$ nên $S = \\int (f_1-f_2)dx$." },
         { type: 'v1', q: "Công thức thể tích vật thể giới hạn bởi $x=a, x=b$ có diện tích thiết diện $S(x)$ là:", a: ["$\\int_b^a S$", "$\\pi \\int S$", "$\\pi \\int S^2$", "$\\int_a^b S(x)dx$"], c: 3, sol: "$V = \\int_a^b S(x)dx$." },
 
         // VÒNG 2 (4 CÂU ĐÚNG/SAI)
@@ -141,11 +143,9 @@
     type: 'v3', 
     q: `Cho hàm số $y=f(x)$. Đồ thị hàm số $y = f'(x)$ là đường cong trong hình dưới. Biết rằng diện tích của các phần hình phẳng $A$ và $B$ lần lượt là $S_A = 4$ và $S_B = 10$. Tính giá trị của $f(3)$, biết giá trị của $f(0) = 2$.
     <br>
-    <div style="text-align:center; margin-top:15px;">
-        <img src="https://gitlab.com/nguyensangnhc/tikz4web/-/raw/main/HinhTuDong/20251231-163330-hinh_1_0b771091.png" 
-             style="max-height: 200px; background: white; padding: 10px; border-radius: 8px; border: 1px solid #ddd;" 
-             alt="Đồ thị tích phân">
-    </div>`, 
+    <div style="text-align:center; margin:15px 0;">
+    <img src="cau5_kq.png" style="max-height: 200px; background: white; padding: 10px; border-radius: 8px; border: 1px solid #ddd;">
+</div>`, 
     c: "-4", 
     sol: `Theo công thức Newton-Leibniz: $f(3) = f(0) + \\int_0^3 f'(x) dx$. <br>
           Dựa vào đồ thị và diện tích đã cho: <br>
@@ -158,10 +158,9 @@
     q: `Một khuôn viên dạng nửa hình tròn, trên đó người thiết kế phần để trồng hoa Cẩm Tú Cầu (phần được gạch chéo trên hình vẽ). <br>
     Biết rằng phần gạch chéo là hình phẳng giới hạn bởi parabol $y=x^2$ và nửa trên của đường tròn $y=\\sqrt{20-x^2}$. Tính số tiền (nghìn đồng) tối thiểu để trồng xong vườn hoa Cẩm Tú Cầu biết rằng để trồng mỗi $m^2$ hoa cần ít nhất là 250 nghìn đồng. (Số tiền được làm tròn đến hàng đơn vị).
     <br>
-    <div style="text-align:center; margin-top:15px;">
-        <img src="https://gitlab.com/nguyensangnhc/tikz4web/-/raw/main/HinhTuDong/20251231-164244-hinh_1_04934191.png" 
-             style="max-height: 200px; background: white; padding: 10px; border-radius: 8px; border: 1px solid #ddd;">
-    </div>`, 
+    <div style="text-align:center; margin:15px 0;">
+    <img src="cau6_kq.png" style="max-height: 200px; background: white; padding: 10px; border-radius: 8px; border: 1px solid #ddd;">
+</div>, 
     c: "4985", 
     sol: `
     <div style="text-align:center; margin-bottom:10px;">
