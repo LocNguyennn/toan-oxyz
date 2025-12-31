@@ -137,40 +137,18 @@
         { type: 'v3', q: "Cho $\\int_2^7[2f+3g]=2$ và $\\int_2^7[f-2g]=4$. Tính $\\int_2^7[f-g]$ (Làm tròn 2 chữ số TP).", c: "3.14", sol: "Giải hệ PT: $2A+3B=2, A-2B=4 \\to A=16/7, B=-6/7 \\to A-B=22/7 \\approx 3.14$." },
         { type: 'v3', q: "Cho $F(x)=(ax^2+bx+c)e^x$ là nguyên hàm của $(x^2+1)e^x$. Tính $a+b+c$.", c: "2", sol: "Đồng nhất hệ số: $a=1, b=-2, c=3 \\to Tổng = 2$." },
         { type: 'v3', q: "Cho $f(x)=3x^2-x-9$ khi $x \\ge 2$ và $x-1$ khi $x < 2$. Tính $I = \\int_0^3 f(x)dx$.", c: "7.5", sol: "$\\int_0^2 (x-1) + \\int_2^3 (3x^2-x-9) = 0 + 7.5 = 7.5$." },
-        {  type: 'v3', q: `Cho hàm số $y=f(x)$. Đồ thị hàm số $y = f'(x)$ là đường cong trong hình dưới. Biết rằng diện tích của các phần hình phẳng $A$ và $B$ lần lượt là $S_A = 4$ và $S_B = 10$. Tính giá trị của $f(3)$, biết giá trị của $f(0) = 2$.
+        { 
+    type: 'v3', 
+    q: `Cho hàm số $y=f(x)$. Đồ thị hàm số $y = f'(x)$ là đường cong trong hình dưới. Biết rằng diện tích của các phần hình phẳng $A$ và $B$ lần lượt là $S_A = 4$ và $S_B = 10$. Tính giá trị của $f(3)$, biết giá trị của $f(0) = 2$.
     <br>
-    <div style="text-align:center; margin-top:15px; background: #fff; padding: 20px; border-radius: 12px; border: 1px solid #ddd;">
-        <svg width="320" height="240" viewBox="-40 -80 340 240" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-                <path id="graph-path" d="M 0 0 C 40 -100, 60 120, 100 120 C 140 120, 160 -100, 200 0 C 240 100, 280 0, 300 -50" fill="none" stroke="#2e7d32" stroke-width="2.5"/>
-                
-                <path id="area-A" d="M 0 0 C 26.6 -66.6, 40 -66.6, 66.6 0 Z" />
-                
-                <path id="area-B" d="M 66.6 0 C 100 100, 133 100, 200 0 Z" />
-            </defs>
-
-            <path d="M 0 0 C 26.6 -66.6, 40 -66.6, 66.6 0 Z" fill="orange" opacity="0.3" />
-            <path d="M 66.6 0 C 100 100, 133 100, 200 0 Z" fill="blue" opacity="0.2" />
-
-            <line x1="-30" y1="0" x2="280" y2="0" stroke="black" stroke-width="1.5" /> <path d="M 280 0 L 274 -4 L 274 4 Z" fill="black" /> <line x1="0" y1="120" x2="0" y2="-70" stroke="black" stroke-width="1.5" /> <path d="M 0 -70 L -4 -64 L 4 -64 Z" fill="black" /> <path d="M -15 35 C 10 -40, 40 -40, 66.6 0 C 100 100, 133 100, 200 0 C 230 -100, 260 0, 280 50" fill="none" stroke="#2e7d32" stroke-width="2.5"/>
-            
-            <text x="285" y="15" font-family="Arial" font-size="14" font-style="italic">x</text>
-            <text x="-20" y="-60" font-family="Arial" font-size="14" font-style="italic">y</text>
-            <text x="-15" y="18" font-family="Arial" font-size="14" font-style="italic">O</text>
-            <text x="240" y="-30" font-family="Arial" font-size="14" font-weight="bold" fill="#2e7d32">y=f'(x)</text>
-            
-            <text x="28" y="-15" font-family="Arial" font-size="16" font-weight="bold" fill="#d35400">A</text>
-            <text x="125" y="50" font-family="Arial" font-size="16" font-weight="bold" fill="#2980b9">B</text>
-
-            <line x1="66.6" y1="-3" x2="66.6" y2="3" stroke="black" stroke-width="1.5" />
-            <text x="62" y="20" font-family="Arial" font-size="12" font-weight="bold">1</text>
-            <line x1="200" y1="-3" x2="200" y2="3" stroke="black" stroke-width="1.5" />
-            <text x="195" y="20" font-family="Arial" font-size="12" font-weight="bold">3</text>
-        </svg>
+    <div style="text-align:center; margin-top:15px;">
+        <img src="https://gitlab.com/nguyensangnhc/tikz4web/-/raw/main/HinhTuDong/20251231-163330-hinh_1_0b771091.png" 
+             style="max-height: 200px; background: white; padding: 10px; border-radius: 8px; border: 1px solid #ddd;" 
+             alt="Đồ thị tích phân">
     </div>`, 
     c: "-4", 
     sol: `Theo công thức Newton-Leibniz: $f(3) = f(0) + \\int_0^3 f'(x) dx$. <br>
-          Dựa vào đồ thị: <br>
+          Dựa vào đồ thị và diện tích đã cho: <br>
           - Trên $[0, 1]$: Vùng A nằm trên $Ox \\Rightarrow \\int_0^1 f'(x) dx = S_A = 4$. <br>
           - Trên $[1, 3]$: Vùng B nằm dưới $Ox \\Rightarrow \\int_1^3 f'(x) dx = -S_B = -10$. <br>
           $\\Rightarrow f(3) = 2 + (4 - 10) = -4$.` 
