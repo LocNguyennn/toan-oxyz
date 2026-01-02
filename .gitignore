@@ -1,0 +1,14 @@
+# Local execution files
+*.bat
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Potential node dependencies (if added later)
+node_modules/
+npm-debug.log*
+
+# Workspace files
+.vscode/
+.idea/
