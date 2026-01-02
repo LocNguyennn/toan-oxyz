@@ -1,0 +1,352 @@
+:root {
+    --bg: #0d1117;
+    --card: #161b22;
+    --accent: #58a6ff;
+    --text: #c9d1d9;
+    --correct: #238636;
+    --wrong: #da3633;
+    --gold: #f1c40f;
+    --ai: #8a2be2;
+}
+
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+    margin: 0;
+    user-select: none;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 10px;
+    border-bottom: 2px solid var(--accent);
+    width: 100%;
+    padding-bottom: 10px;
+}
+
+#nameModal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.98);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.name-box {
+    background: var(--card);
+    padding: 40px;
+    border-radius: 15px;
+    text-align: center;
+    border: 2px solid var(--accent);
+    width: 90%;
+    max-width: 700px;
+}
+
+.name-box h2 {
+    white-space: nowrap;
+    font-size: 1.6rem;
+    color: var(--gold);
+}
+
+.name-box p {
+    font-size: 1.1rem;
+    color: var(--text);
+    margin: 15px 0;
+}
+
+.name-input {
+    padding: 15px;
+    width: 80%;
+    font-size: 1.1rem;
+    border-radius: 8px;
+    border: 1px solid var(--accent);
+    margin-bottom: 20px;
+    background: #0d1117;
+    color: white;
+    outline: none;
+}
+
+.nav-section {
+    width: 100%;
+    max-width: 1050px;
+    background: #161b22;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid #30363d;
+    margin-bottom: 15px;
+    display: none;
+    flex-direction: column;
+}
+
+.nav-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    justify-content: center;
+    margin-bottom: 8px;
+}
+
+.nav-label {
+    font-size: 0.75rem;
+    color: var(--gold);
+    font-weight: bold;
+    width: 100%;
+    text-align: center;
+    margin-bottom: 3px;
+}
+
+.nav-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 5px;
+    border: 1px solid #30363d;
+    background: #21262d;
+    color: white;
+    cursor: pointer;
+    transition: 0.3s;
+    font-size: 0.8rem;
+}
+
+.nav-btn.active {
+    background: var(--accent);
+    border-color: white;
+    font-weight: bold;
+}
+
+.nav-btn.done {
+    border-bottom: 3px solid var(--correct);
+}
+
+.game-container {
+    max-width: 1050px;
+    width: 100%;
+    display: none;
+    grid-template-columns: 1fr 300px;
+    gap: 15px;
+}
+
+@media (max-width: 850px) {
+    .game-container {
+        grid-template-columns: 1fr;
+    }
+}
+
+.quiz-card {
+    background: var(--card);
+    padding: 20px;
+    border-radius: 12px;
+    border: 1px solid #30363d;
+    min-height: 480px;
+    display: flex;
+    flex-direction: column;
+}
+
+.part-indicator {
+    color: var(--gold);
+    font-weight: bold;
+    background: #21262d;
+    padding: 10px;
+    border-radius: 6px;
+    margin-bottom: 12px;
+    border-left: 4px solid var(--gold);
+    font-size: 0.9rem;
+}
+
+.q-text {
+    font-size: 1.05rem;
+    line-height: 1.7;
+    margin-bottom: 15px;
+    text-align: justify;
+}
+
+.options-grid {
+    display: grid;
+    gap: 8px;
+    flex-grow: 1;
+}
+
+.btn {
+    background: #21262d;
+    border: 1px solid #30363d;
+    color: var(--text);
+    padding: 12px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    text-align: left;
+    display: flex;
+    gap: 10px;
+}
+
+.btn b {
+    color: var(--accent);
+}
+
+.btn.selected {
+    background: #30363d;
+    border-color: var(--accent);
+    border-width: 2px;
+}
+
+.tf-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #0d1117;
+    padding: 10px;
+    margin-bottom: 8px;
+    border-radius: 8px;
+    border: 1px solid #30363d;
+}
+
+.btn-tf {
+    padding: 6px 12px;
+    border: 1px solid #30363d;
+    border-radius: 4px;
+    cursor: pointer;
+    background: #21262d;
+    color: white;
+    font-weight: bold;
+}
+
+.btn-tf.active-t {
+    background: var(--correct) !important;
+}
+
+.btn-tf.active-f {
+    background: var(--wrong) !important;
+}
+
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.numpad-box {
+    background: var(--card);
+    padding: 15px;
+    border-radius: 12px;
+    border: 1px solid var(--accent);
+    text-align: center;
+}
+
+.ans-display {
+    background: #000;
+    color: var(--accent);
+    font-size: 1.8rem;
+    padding: 8px;
+    border-radius: 8px;
+    border: 1px solid var(--accent);
+    margin-bottom: 10px;
+    font-family: monospace;
+    min-height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.numpad {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+}
+
+.num-btn {
+    background: #30363d;
+    border: 1px solid #58a6ff22;
+    color: white;
+    padding: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1.1rem;
+    font-weight: bold;
+}
+
+.submit-btn {
+    width: 100%;
+    padding: 12px;
+    background: var(--gold);
+    color: #000;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 1rem;
+}
+
+#final-area {
+    display: none;
+    width: 100%;
+    max-width: 900px;
+    padding: 20px;
+}
+
+.sol-card {
+    background: var(--card);
+    padding: 25px;
+    border-radius: 12px;
+    margin-top: 25px;
+    border: 1px solid #30363d;
+    text-align: left;
+}
+
+.sol-header {
+    border-bottom: 1px solid #30363d;
+    padding-bottom: 15px;
+    margin-bottom: 15px;
+}
+
+.ai-btn {
+    background: linear-gradient(45deg, #4b0082, #8a2be2);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: bold;
+    margin-top: 15px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.85rem;
+}
+
+.ai-sol-box {
+    display: none;
+    background: #0d1117;
+    padding: 20px;
+    border-radius: 10px;
+    border-left: 4px solid var(--ai);
+    margin-top: 15px;
+    line-height: 1.8;
+}
+
+.sol-item {
+    margin-bottom: 12px;
+    display: block;
+    border-bottom: 1px dashed #21262d;
+    padding-bottom: 8px;
+}
+
+.img-container {
+    text-align: center;
+    margin: 10px 0;
+    background: white;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+}
+
+.img-container img {
+    max-height: 180px;
+}
