@@ -146,6 +146,26 @@
             render();
         }
 
+        function processContent(text, isAnswer = false) {
+            if (!text) return isAnswer ? "" : "Trống";
+            let content = String(text);
+
+            const driveRegex = /https:\/\/drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]+)[^\s"']*/gi;
+            content = content.replace(driveRegex, "https://lh3.googleusercontent.com/d/$1");
+
+            const imgUrlRegex = /(https?:\/\/.*?\.(?:png|jpg|jpeg|gif|webp|svg|bmp)(?:\?.*?)?|https:\/\/lh3\.googleusercontent\.com\/d\/[a-zA-Z0-9_-]+)/gi;
+
+            const imgStyle = isAnswer
+                ? "max-width:100%; max-height:150px; border-radius:8px; margin:5px 0; display:block;"
+                : "max-width:100%; border-radius:12px; margin:10px 0; box-shadow:0 8px 24px rgba(0,0,0,0.5); border: 1px solid #30363d;";
+
+            content = content.replace(imgUrlRegex, (match) => {
+                return `<div style="text-align:center; width:100%;"><img src="${match}" referrerpolicy="no-referrer" style="${imgStyle}" onerror="console.error('IMAGE LOAD FAILED:', this.src);"></div>`;
+            });
+
+            return content;
+        }
+
         function render() {
             try {
                 if (!questions || questions.length === 0) {
@@ -158,24 +178,17 @@
                     return;
                 }
 
-                // Image & Link Detection Logic (Supports mixed text and inline images)
-                let qContent = q.q || "Nội dung câu hỏi trống";
+                const processedQuestion = processContent(q.q);
 
-                // 1. Convert Google Drive Links to direct lh3 URL (more reliable for embedding)
-                // Use a more permissive regex to catch all query params (like ?usp=drive_link)
-                const driveRegex = /https:\/\/drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]+)[^\s"']*/gi;
-                qContent = qContent.replace(driveRegex, "https://lh3.googleusercontent.com/d/$1");
-
-                // 2. Identify Image URLs and wrap them in centered img tags
-                const imgUrlRegex = /(https?:\/\/.*?\.(?:png|jpg|jpeg|gif|webp|svg|bmp)(?:\?.*?)?|https:\/\/lh3\.googleusercontent\.com\/d\/[a-zA-Z0-9_-]+)/gi;
-                qContent = qContent.replace(imgUrlRegex, (match) => {
-                    return `<div style="text-align:center;"><img src="${match}" referrerpolicy="no-referrer" style="max-width:100%; border-radius:12px; margin:10px 0; box-shadow:0 8px 24px rgba(0,0,0,0.5); border: 1px solid #30363d;" onerror="console.error('IMAGE LOAD FAILED:', this.src); alert('Không thể tải ảnh: ' + this.src);"></div>`;
-                });
-
-                console.log("Processed qContent:", qContent); // Debug log
+                let localIdx = 0;
+                for (let i = 0; i <= currentIdx; i++) {
+                    if (questions[i].type === q.type) {
+                        localIdx++;
+                    }
+                }
 
                 document.getElementById('q-num').innerText = currentIdx + 1;
-                document.getElementById('q-text').innerHTML = qContent;
+                document.getElementById('q-text').innerHTML = `<span class="q-label" style="color:var(--gold); font-weight:bold;">Câu ${localIdx}:</span> ` + processedQuestion;
                 const zone = document.getElementById('ans-zone'), nextBtn = document.getElementById('next-btn');
                 zone.innerHTML = ''; nextBtn.style.display = 'none';
 
@@ -184,10 +197,22 @@
                     if (!q.a || !Array.isArray(q.a)) throw new Error("Dữ liệu đáp án (a) bị thiếu hoặc sai định dạng");
 
                     q.a.forEach((opt, i) => {
-                        let b = document.createElement('button'); b.className = 'btn'; b.innerHTML = opt;
+                        let b = document.createElement('button'); b.className = 'btn';
+                        const processedOpt = processContent(opt, true);
+                        b.innerHTML = `<b>${String.fromCharCode(65 + i)}.</b> ${processedOpt}`;
+
+                        b.style.display = "block";
+                        b.style.textAlign = "left";
+
                         b.onclick = () => {
-                            if (i === q.c) { b.classList.add('correct'); score += 0.25; openTile(); }
-                            else { b.classList.add('wrong'); document.querySelectorAll('.btn')[q.c].classList.add('correct'); }
+                            if (i === q.c) {
+                                b.classList.add('correct');
+                                score += 0.25;
+                                openTile();
+                            } else {
+                                b.classList.add('wrong');
+                                document.querySelectorAll('.btn')[q.c].classList.add('correct');
+                            }
                             document.querySelectorAll('.btn').forEach(btn => btn.disabled = true);
                             nextBtn.style.display = 'block'; updateScore();
                         };
@@ -200,7 +225,8 @@
                     v2Ans = new Array(4).fill(null);
                     q.items.forEach((item, i) => {
                         let div = document.createElement('div'); div.className = 'tf-row';
-                        div.innerHTML = `<div style="flex:1; padding-right:10px;">${item.l}</div><div style="display:flex; gap:8px;">
+                        const processedLabel = processContent(item.l, true);
+                        div.innerHTML = `<div style="flex:1; padding-right:10px;"><b>${String.fromCharCode(97 + i)}.</b> ${processedLabel}</div><div style="display:flex; gap:8px;">
                     <button class="btn-tf" id="t-${i}" onclick="setV2(${i},true)">Đúng</button>
                     <button class="btn-tf" id="f-${i}" onclick="setV2(${i},false)">Sai</button>
                 </div>`;
