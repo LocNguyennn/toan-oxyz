@@ -13,14 +13,14 @@
 </head>
 
 <body oncontextmenu="return false;">
-    <script>
+    <!-- <script>
         // Disable F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U
         document.onkeydown = function (e) {
             if (e.keyCode == 123) return false;
             if (e.ctrlKey && e.shiftKey && (e.keyCode == 'I'.charCodeAt(0) || e.keyCode == 'J'.charCodeAt(0))) return false;
             if (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) return false;
         }
-    </script>
+    </script> -->
 
     <div id="nameModal">
         <div class="name-box">
@@ -211,9 +211,10 @@
                                 openTile();
                             } else {
                                 b.classList.add('wrong');
-                                document.querySelectorAll('.btn')[q.c].classList.add('correct');
+                                // Scope selector to zone to avoid index mismatch with start-btn
+                                zone.querySelectorAll('.btn')[q.c].classList.add('correct');
                             }
-                            document.querySelectorAll('.btn').forEach(btn => btn.disabled = true);
+                            zone.querySelectorAll('.btn').forEach(btn => btn.disabled = true);
                             nextBtn.style.display = 'block'; updateScore();
                         };
                         zone.appendChild(b);
